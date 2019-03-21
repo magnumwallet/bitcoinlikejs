@@ -1,10 +1,12 @@
 // @flow
+var bs58 = require('bs58')
 var bs58check = require('bs58check')
 var secp256k1 = require('secp256k1')
 var zbufferutils = require('./bufferutils')
 var zcrypto = require('./crypto')
 var zopcodes = require('./opcodes')
 var zconfig = require('./config')
+var random = require('./random')
 
 /*
  * Makes a private key
@@ -13,6 +15,14 @@ var zconfig = require('./config')
  */
 function mkPrivKey (phrase: string): string {
   return zcrypto.sha256(Buffer.from(phrase, 'utf-8'))
+}
+
+/*
+ * Generates a private key
+ * @return {Sting} Private key
+ */
+function genPrivKey (): string {
+  return zcrypto.sha256(random.getRandomBuffer(32))
 }
 
 /*
@@ -46,15 +56,30 @@ function privKeyToPubKey (privKey: string, toCompressed: boolean = false): strin
  * @return {Sting} Public Key (uncompressed)
  */
 function WIFToPrivKey (wifPk: string): string {
-  var og = bs58check.decode(wifPk, 'hex').toString('hex')
-  og = og.substr(2, og.length) // remove WIF format ('80')
+  return WIFToPrivKeyObj(wifPk).hex
+}
+
+/*
+ * Given a WIF format pk, convert it back to the original pk
+ * @param {String} privKey (private key)
+ * @return {Object} hex: Private Key (uncompressed), compressed: Is Private Key in compressed format?
+ */
+function WIFToPrivKeyObj (wifPk): object {
+  let result = {compressed: true}
+  let og = bs58check.decode(wifPk, 'hex').toString('hex')
+  let wifBytes = zconfig.mainnet.wif.length
+  og = og.substr(wifBytes, og.length) // remove WIF format ('80')
 
   // remove the '01' at the end to 'compress it' during WIF conversion
   if (og.length > 64) {
     og = og.substr(0, 64)
+  } else {
+    result.compressed = false
   }
 
-  return og
+  result.hex = og
+
+  return result
 }
 
 /*
@@ -101,11 +126,13 @@ function multiSigRSToAddress (redeemScript: string, scriptHash: string = zconfig
 }
 
 module.exports = {
+  genPrivKey: genPrivKey,
   mkPrivKey: mkPrivKey,
   privKeyToWIF: privKeyToWIF,
   privKeyToPubKey: privKeyToPubKey,
   pubKeyToAddr: pubKeyToAddr,
   WIFToPrivKey: WIFToPrivKey,
+  WIFToPrivKeyObj: WIFToPrivKeyObj,
   mkMultiSigRedeemScript: mkMultiSigRedeemScript,
   multiSigRSToAddress: multiSigRSToAddress
 }

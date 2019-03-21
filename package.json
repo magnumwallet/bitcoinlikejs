@@ -1,6 +1,6 @@
 {
   "name": "bitcoinlikejs",
-  "version": "v1.2.0",
+  "version": "v1.2.3",
   "description": "Dead easy to use Bitcoin Like coins JavaScript based library",
   "main": "./lib/index.js",
   "repository": "https://github.com/magnumwallet/bitcoinlikejs",
