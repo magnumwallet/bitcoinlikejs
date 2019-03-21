@@ -1,9 +1,9 @@
-var zencashjs = require('..')
+var bitcoinlikejs = require('..')
 var chai = require('chai')
 var expect = chai.expect
 
 it('mkZSecretKey() should be deterministic', function () {
-  var z_secretKey = zencashjs.zaddress.mkZSecretKey(
+  var z_secretKey = bitcoinlikejs.zaddress.mkZSecretKey(
     'Z pigs likes to snooze. ZZZZ'
   )
   expect(z_secretKey).to.equal(
@@ -12,7 +12,7 @@ it('mkZSecretKey() should be deterministic', function () {
 })
 
 it('zSecretToSpendingKey() should be deterministic', function () {
-  var spendingKey = zencashjs.zaddress.zSecretKeyToSpendingKey(
+  var spendingKey = bitcoinlikejs.zaddress.zSecretKeyToSpendingKey(
     '0c10a61a669bc4a51000c4c74ff58c151912889891089f7bae5e4994a73af7a8'
   )
   expect(spendingKey).to.equal(
@@ -21,7 +21,7 @@ it('zSecretToSpendingKey() should be deterministic', function () {
 })
 
 it('zSecretToPayingKey() should be deterministic', function () {
-  var a_pk = zencashjs.zaddress.zSecretKeyToPayingKey(
+  var a_pk = bitcoinlikejs.zaddress.zSecretKeyToPayingKey(
     '0c10a61a669bc4a51000c4c74ff58c151912889891089f7bae5e4994a73af7a8'
   )
   expect(a_pk).to.equal(
@@ -30,7 +30,7 @@ it('zSecretToPayingKey() should be deterministic', function () {
 })
 
 it('zSecretToTransmissionKey() should be deterministic', function () {
-  var pk_enc = zencashjs.zaddress.zSecretKeyToTransmissionKey(
+  var pk_enc = bitcoinlikejs.zaddress.zSecretKeyToTransmissionKey(
     '0c10a61a669bc4a51000c4c74ff58c151912889891089f7bae5e4994a73af7a8'
   )
   expect(pk_enc).to.equal(
@@ -39,7 +39,7 @@ it('zSecretToTransmissionKey() should be deterministic', function () {
 })
 
 it('mkZAddress() should be deterministic', function () {
-  var Zaddress = zencashjs.zaddress.mkZAddress(
+  var Zaddress = bitcoinlikejs.zaddress.mkZAddress(
     '927a3819627247c0dd39102ec5449fc6fc952e242aad08615df9f26718912e27',
     '22d666c34ababacf6a9a4a752cc7870b505b64e85638aa45d23ac32992397960'
   )
